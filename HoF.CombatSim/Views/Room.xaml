@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="HoF.CombatSim.Views.Room"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoF.CombatSim.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="200" Margin="5" Text="{Binding SelectedRoom.Name}" FontWeight="Bold" FontSize="14">
+            <TextBox.Style>
+                <Style TargetType="TextBox"  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    <Style.Resources>
+                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                            <VisualBrush.Visual>
+                                <Label Content="Room Name" Foreground="LightGray" />
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="Text" Value="{x:Null}">
+                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="False">
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button VerticalAlignment="Center" Margin="5" Command="{Binding AddCharacterCommand}">Add</Button>
+            <Button VerticalAlignment="Center" Margin="5">Paste</Button>
+        </StackPanel>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="_charactersList" Background="Transparent" ItemsSource="{Binding SelectedRoom.Players}" SelectedItem="{Binding SelectedCharacter}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <prism:InvokeCommandAction Command="{Binding CharacterSelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=_charactersList}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBoxItem>
+                            <TextBlock Text="{Binding Name}"></TextBlock>
+                        </ListBoxItem>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="CharacterDetailsRegion"/>
+        </Grid>
+        <Button Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding NavigateCommand}" Margin="5">Back</Button>
+    </Grid>
+</UserControl>
