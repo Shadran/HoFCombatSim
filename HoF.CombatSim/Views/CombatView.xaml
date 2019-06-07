@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="HoF.CombatSim.Views.CombatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoF.CombatSim.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="16" FontWeight="Bold">ATTACKER</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="0" FontSize="16" FontWeight="Bold">DEFENDER</TextBlock>
+        <DockPanel Grid.Column="0" Grid.Row="1">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding Attacker.Name}" FontSize="14"></TextBlock>
+            <Grid DockPanel.Dock="Top" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0">Items</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="0">Allies</TextBlock>
+                <ListBox Grid.Column="0" Grid.Row="1"></ListBox>
+                <ListBox Grid.Column="1" Grid.Row="1"></ListBox>
+            </Grid>
+        </DockPanel>
+        <DockPanel Grid.Column="1" Grid.Row="1">
+            <TextBlock DockPanel.Dock="Top" Text="{Binding Defender.Name}" FontSize="14"></TextBlock>
+            <Grid DockPanel.Dock="Top" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0">Items</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="0">Allies</TextBlock>
+                <ListBox Grid.Column="0" Grid.Row="1"></ListBox>
+                <ListBox Grid.Column="1" Grid.Row="1"></ListBox>
+            </Grid>
+        </DockPanel>
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" FontWeight="Bold">Initial Stats</TextBlock>
+            <local:StatsShow Grid.Column="0" Grid.Row="1"></local:StatsShow>
+            <TextBlock Grid.Column="5" Grid.Row="0" FontSize="14" FontWeight="Bold">Initial Stats</TextBlock>
+            <local:StatsShow Grid.Column="1" Grid.Row="1"></local:StatsShow>
+            <TextBlock Grid.Column="0" Grid.Row="2" FontSize="14" FontWeight="Bold">Other Bonuses</TextBlock>
+            <local:StatsShow Grid.Column="0" Grid.Row="3"></local:StatsShow>
+            <TextBlock Grid.Column="5" Grid.Row="2" FontSize="14" FontWeight="Bold">Other Bonuses</TextBlock>
+            <local:StatsShow Grid.Column="1" Grid.Row="3"></local:StatsShow>
+            <TextBlock Grid.Column="0" Grid.Row="4" FontSize="14" FontWeight="Bold">Pre-Combat Stats</TextBlock>
+            <local:StatsShow Grid.Column="0" Grid.Row="5"></local:StatsShow>
+            <TextBlock Grid.Column="5" Grid.Row="4" FontSize="14" FontWeight="Bold">Pre-Combat Stats</TextBlock>
+            <local:StatsShow Grid.Column="1" Grid.Row="5"></local:StatsShow>
+            <TextBlock Grid.Column="0" Grid.Row="6" FontSize="14" FontWeight="Bold">Post-Combat Stats</TextBlock>
+            <local:StatsShow Grid.Column="0" Grid.Row="7"></local:StatsShow>
+            <TextBlock Grid.Column="5" Grid.Row="6" FontSize="14" FontWeight="Bold">Post-Combat Stats</TextBlock>
+            <local:StatsShow Grid.Column="1" Grid.Row="7"></local:StatsShow>
+        </Grid>
+    </Grid>
+</UserControl>

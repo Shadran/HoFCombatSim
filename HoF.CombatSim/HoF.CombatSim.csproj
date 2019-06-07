@@ -57,13 +57,31 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\Character.cs" />
+    <Compile Include="Model\CharactersCache.cs" />
+    <Compile Include="Model\Encounter.cs" />
+    <Compile Include="Model\EncountersMatcher.cs" />
+    <Compile Include="Model\ICharactersCache.cs" />
     <Compile Include="Model\Room.cs" />
     <Compile Include="Modules\RoomHandlingModule.cs" />
+    <Compile Include="Notifications\ISelectCharacterNotification.cs" />
+    <Compile Include="Notifications\SelectCharacterNotification.cs" />
     <Compile Include="Regions\ContentRegion.cs" />
+    <Compile Include="ViewModels\CharacterSelectionViewModel.cs" />
+    <Compile Include="ViewModels\CharacterViewModel.cs" />
+    <Compile Include="ViewModels\EncountersListViewModel.cs" />
     <Compile Include="ViewModels\RoomsListViewModel.cs" />
     <Compile Include="ViewModels\RoomViewModel.cs" />
     <Compile Include="Views\Character.xaml.cs">
       <DependentUpon>Character.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CharacterSelection.xaml.cs">
+      <DependentUpon>CharacterSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CombatView.xaml.cs">
+      <DependentUpon>CombatView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EncountersList.xaml.cs">
+      <DependentUpon>EncountersList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RoomsList.xaml.cs">
       <DependentUpon>RoomsList.xaml</DependentUpon>
@@ -71,7 +89,22 @@
     <Compile Include="Views\Room.xaml.cs">
       <DependentUpon>Room.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StatsShow.xaml.cs">
+      <DependentUpon>StatsShow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\Character.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CharacterSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CombatView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EncountersList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -93,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Room.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatsShow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

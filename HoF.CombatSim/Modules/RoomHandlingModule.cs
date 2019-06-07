@@ -23,6 +23,8 @@ namespace HoF.CombatSim.Modules
         {
             containerRegistry.RegisterForNavigation<Views.Room>();
             containerRegistry.RegisterForNavigation<Views.Character>();
+            containerRegistry.RegisterForNavigation<Views.EncountersList>();
+            containerRegistry.RegisterSingleton<Model.ICharactersCache, Model.CharactersCache>();
         }
     }
 }

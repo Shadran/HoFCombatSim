@@ -13,70 +13,106 @@ namespace HoF.CombatSim.ViewModels
 {
     public class RoomViewModel : BindableBase, INavigationAware
     {
-        private Room _selectedRoom;
+        private enum Tabs
+        {
+            CharacterTab = 0,
+            EncounersTab = 1
+        }
 
-        public Room SelectedRoom { get => _selectedRoom; set => SetProperty(ref _selectedRoom, value); }
-        public Character SelectedCharacter { get => _selectedCharacter; set => SetProperty(ref _selectedCharacter, value); }
-
-        private DelegateCommand _navigateCommand;
         private readonly IRegionManager _regionManager;
+        private readonly ICharactersCache _characters;
+        private Room _room;
+        private Character _selectedCharacter;
+        private int _selectedTab;
 
-        public DelegateCommand NavigateCommand =>
-            _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
+        public Room Room { get => _room; set => SetProperty(ref _room, value); }
+        public int SelectedTab { get => _selectedTab; set => SetProperty(ref _selectedTab, value); }
+        public Character SelectedCharacter
+        {
+            get => _selectedCharacter;
+            set
+            {
+                SetProperty(ref _selectedCharacter, value);
+                if (_selectedCharacter == null)
+                {
+                    DeactivateRegion("CharacterDetailsRegion");
+                }
+                else
+                {
+                    _regionManager.RequestNavigate("CharacterDetailsRegion", "Character", new NavigationParameters { { "character", _selectedCharacter } });
+                }
+            }
+        }
 
-        public void ExecuteNavigateCommand()
+        public DelegateCommand NavigateCommand { get; private set; }
+
+        public void NavigateBack()
         {
             _regionManager.RequestNavigate("MainRegion", "RoomsList");
         }
 
-        private DelegateCommand<Character> _characterSelectedCommand;
-        public DelegateCommand<Character> CharacterSelectedCommand =>
-            _characterSelectedCommand ?? (_characterSelectedCommand = new DelegateCommand<Character>(ExecuteCharacterSelectedCommand));
 
-        void ExecuteCharacterSelectedCommand(Character character)
+        public DelegateCommand AddCharacterCommand { get; private set; }
+
+        void AddCharacter()
         {
-            var parameters = new NavigationParameters();
-            parameters.Add("character", character);
-            _regionManager.RequestNavigate("CharacterDetailsRegion", "Character", parameters);
-        }
-
-        private DelegateCommand _addCharacterCommand;
-        private Character _selectedCharacter;
-
-        public DelegateCommand AddCharacterCommand =>
-            _addCharacterCommand ?? (_addCharacterCommand = new DelegateCommand(ExecuteAddCharacterCommand));
-
-        void ExecuteAddCharacterCommand()
-        {
-            if (SelectedRoom == null) return;
-            var newCharacter = new Character();
-            SelectedRoom.Players.Add(newCharacter);
+            if (Room == null) return;
+            var newCharacter = new Character { Room = Room };
+            _characters.Add(newCharacter);
+            Room.Players.Add(newCharacter);
             SelectedCharacter = newCharacter;
+            SelectedTab = (int)Tabs.CharacterTab;
         }
 
-        public RoomViewModel(IRegionManager regionManager)
+        public DelegateCommand<Character> RemoveCharacterCommand { get; private set; }
+
+        void RemoveCharacter(Character character)
+        {
+            if (character == null) return;
+            _characters.Remove(character);
+            Room.Players.Remove(character);
+        }
+
+        bool CanRemoveCharacter(Character character)
+        {
+            return character != null;
+        }
+
+        public RoomViewModel(IRegionManager regionManager, ICharactersCache characters)
         {
             _regionManager = regionManager;
+            _characters = characters;
+            NavigateCommand = new DelegateCommand(NavigateBack);
+            AddCharacterCommand = new DelegateCommand(AddCharacter);
+            RemoveCharacterCommand = new DelegateCommand<Character>(RemoveCharacter, CanRemoveCharacter).ObservesProperty(() => SelectedCharacter);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            var room = navigationContext.Parameters["room"] as Room;
-            if (room != null)
-                SelectedRoom = room;
+            if (navigationContext.Parameters["room"] is Room room)
+                Room = room;
+            _regionManager.RequestNavigate("RoomEncountersRegion", "EncountersList", new NavigationParameters { { "room", Room } });
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            var room = navigationContext.Parameters["room"] as Room;
-            if (room != null)
-                return SelectedRoom != null && SelectedRoom == room;
+            if (navigationContext.Parameters["room"] is Room room)
+                return Room != null && Room == room;
             else
                 return true;
         }
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+            SelectedCharacter = null;
+            DeactivateRegion("RoomEncountersRegion");
+        }
+
+        private void DeactivateRegion(string regionName)
+        {
+            var activeView = _regionManager.Regions[regionName].ActiveViews.FirstOrDefault();
+            if (activeView != null)
+                _regionManager.Regions[regionName].Deactivate(activeView);
         }
     }
 }

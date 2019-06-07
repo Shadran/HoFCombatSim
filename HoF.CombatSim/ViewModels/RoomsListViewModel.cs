@@ -15,12 +15,15 @@ namespace HoF.CombatSim.ViewModels
     {
 
         private DelegateCommand<Room> _navigateCommand;
+        private Room _selectedRoom;
         private readonly IRegionManager _regionManager;
+        private readonly ICharactersCache _characters;
 
         public DelegateCommand<Room> NavigateCommand =>
             _navigateCommand ?? (_navigateCommand = new DelegateCommand<Room>(ExecuteNavigateCommand));
 
         public ObservableCollection<Room> Rooms { get; private set; } = new ObservableCollection<Room>();
+        public Room SelectedRoom { get => _selectedRoom; set => SetProperty(ref _selectedRoom, value); }
 
         private void ExecuteNavigateCommand(Room room)
         {
@@ -30,9 +33,29 @@ namespace HoF.CombatSim.ViewModels
             _regionManager.RequestNavigate("MainRegion", "Room", parameters);
         }
 
-        public RoomsListViewModel(IRegionManager regionManager)
+        private DelegateCommand<Room> _removeRoomCommand;
+        public DelegateCommand<Room> RemoveRoomCommand =>
+            _removeRoomCommand ?? (_removeRoomCommand = new DelegateCommand<Room>(ExecuteRemoveRoomCommand, CanExecuteRemoveRoomCommand).ObservesProperty(() => SelectedRoom));
+
+        void ExecuteRemoveRoomCommand(Room room)
+        {
+            if (room == null) return;
+            foreach(var character in room.Players)
+            {
+                _characters.Remove(character);
+            }
+            Rooms.Remove(room);
+        }
+
+        bool CanExecuteRemoveRoomCommand(Room room)
+        {
+            return room != null;
+        }
+
+        public RoomsListViewModel(IRegionManager regionManager, ICharactersCache characters)
         {
             _regionManager = regionManager;
+            _characters = characters;
             CreateRooms();
         }
 

@@ -8,42 +8,24 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ItemsControl ItemsSource="{Binding Rooms}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <DockPanel Name="RoomPanel" HorizontalAlignment="Stretch" Margin="5,0,5,0">
-                    <DockPanel.Background>
-                        <SolidColorBrush Color="Transparent" x:Name="PanelColor"/>
-                    </DockPanel.Background>
-                    <TextBlock Text="{Binding Name}" Margin="5"/>
-                    <Button HorizontalAlignment="Right" Margin="5" Command="{Binding Path=DataContext.NavigateCommand,
+    <StackPanel>
+        <Menu Background="Transparent">
+            <MenuItem Header="Add" Command="{Binding AddRoomCommand}"></MenuItem>
+            <MenuItem Header="Remove" Command="{Binding RemoveRoomCommand}" CommandParameter="{Binding SelectedRoom}"></MenuItem>
+        </Menu>
+        <ListBox Background="Transparent" ItemsSource="{Binding Rooms}" SelectedItem="{Binding SelectedRoom}" HorizontalContentAlignment="Stretch" BorderThickness="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Name="RoomPanel" Margin="5,0,5,0">
+                        <StackPanel DockPanel.Dock="Left">
+                            <TextBlock Text="{Binding Name}" Margin="5" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Players.Count, StringFormat=Players: {0}}"></TextBlock>
+                        </StackPanel>
+                        <Button HorizontalAlignment="Right" Margin="5" Command="{Binding Path=DataContext.NavigateCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">Edit</Button>
-                </DockPanel>
-                <DataTemplate.Triggers>
-                    <EventTrigger RoutedEvent="DockPanel.MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation 
-                                    Storyboard.TargetName="PanelColor" 
-                                    Storyboard.TargetProperty="Color"
-                                    To="LightCyan" Duration="0:0:0.1" AutoReverse="False">
-                                </ColorAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="DockPanel.MouseLeave">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation 
-                                        Storyboard.TargetName="PanelColor" 
-                                        Storyboard.TargetProperty="Color"
-                                        To="Transparent" Duration="0:0:0.25" AutoReverse="False">
-                                </ColorAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
 </UserControl>

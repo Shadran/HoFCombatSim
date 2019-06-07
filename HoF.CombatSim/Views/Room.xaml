@@ -12,11 +12,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="200" Margin="5" Text="{Binding SelectedRoom.Name}" FontWeight="Bold" FontSize="14">
+        <TextBox Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="200" Margin="5" Text="{Binding Room.Name}" FontWeight="Bold" FontSize="14">
             <TextBox.Style>
                 <Style TargetType="TextBox"  xmlns:sys="clr-namespace:System;assembly=mscorlib">
                     <Style.Resources>
@@ -43,30 +43,33 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button VerticalAlignment="Center" Margin="5" Command="{Binding AddCharacterCommand}">Add</Button>
-            <Button VerticalAlignment="Center" Margin="5">Paste</Button>
+        <StackPanel Grid.Row="1">
+            <Menu Background="{x:Null}">
+                <MenuItem Header="Add" Command="{Binding AddCharacterCommand}"></MenuItem>
+                <MenuItem Header="Paste List"></MenuItem>
+                <MenuItem Header="Remove" Command="{Binding RemoveCharacterCommand}" CommandParameter="{Binding SelectedCharacter}"></MenuItem>
+            </Menu>
         </StackPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="_charactersList" Background="Transparent" ItemsSource="{Binding SelectedRoom.Players}" SelectedItem="{Binding SelectedCharacter}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <prism:InvokeCommandAction Command="{Binding CharacterSelectedCommand}" CommandParameter="{Binding SelectedItem, ElementName=_charactersList}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+            <ListBox Margin="5" x:Name="_charactersList" Background="Transparent" ItemsSource="{Binding Room.Players}" SelectedItem="{Binding SelectedCharacter}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ListBoxItem>
-                            <TextBlock Text="{Binding Name}"></TextBlock>
-                        </ListBoxItem>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <ContentControl Grid.Column="1" prism:RegionManager.RegionName="CharacterDetailsRegion"/>
+            <TabControl Grid.Column="1" SelectedIndex="{Binding SelectedTab}">
+                <TabItem Header="Character Details">
+                    <ContentControl Margin="5" prism:RegionManager.RegionName="CharacterDetailsRegion"/>
+                </TabItem>
+                <TabItem Header="Possible Encounters">
+                    <ContentControl Margin="5" prism:RegionManager.RegionName="RoomEncountersRegion"/>
+                </TabItem>
+            </TabControl>
         </Grid>
         <Button Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding NavigateCommand}" Margin="5">Back</Button>
     </Grid>
